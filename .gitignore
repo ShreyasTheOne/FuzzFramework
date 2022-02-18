@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Super-Duper-Fuzzer
+sample-configuration.yaml
