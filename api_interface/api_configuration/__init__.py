@@ -90,7 +90,7 @@ class APIConfiguration:
                 'responses': parsed_responses,
             }
         
-        self.API_CONFIG = {
+        self.structure = {
             **API_CONFIG,
             'endpoints': parsed_endpoints,
         }
@@ -131,3 +131,8 @@ class APIConfiguration:
                 'exact': exact,
                 'payload': payload
             }
+
+
+def configure(file_path):
+    global API_CONFIGURATION
+    API_CONFIGURATION = APIConfiguration(file_path)

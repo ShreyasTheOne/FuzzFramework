@@ -1,9 +1,12 @@
 import sys
 from getopt import getopt, GetoptError
-from api_interface.api_configuration.api_configuration import APIConfiguration
+
+from api_interface.api_configuration import configure as configure_api
+from api_interface.request_engine import RequestEngine
+
 
 HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml\n\n"
-API_CONFIGURATION = None
+
 
 def main(argv):
     """
@@ -31,8 +34,9 @@ def main(argv):
         sys.exit(2)
 
     # Generate API Configuration
-    global API_CONFIGURATION
-    API_CONFIGURATION = APIConfiguration(api_config_file_path).API_CONFIG
+    configure_api(api_config_file_path)
+
+    
         
 if __name__ == '__main__':
     main(sys.argv[1:])

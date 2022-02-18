@@ -1,4 +1,5 @@
 import requests
+from api_interface import api_configuration
 
 class RequestEngine:
     """
@@ -6,12 +7,13 @@ class RequestEngine:
     send requests the API using the given   
     """
 
-    def __init__(self, endpoint):
+    def __init__(self):
         """
         Initialise request
         """
 
-        self.endpoint = endpoint
+        self.API_CONFIGURATION = api_configuration.API_CONFIGURATION.structure
+
     
     def send_request(
         self, 
