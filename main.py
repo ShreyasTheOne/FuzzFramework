@@ -4,6 +4,7 @@ from getopt import getopt, GetoptError
 from api_interface.api_configuration import configure as configure_api
 from api_interface.request_engine import RequestEngine
 
+from core.sample_fuzzer import SampleFuzzer
 
 HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml\n\n"
 
@@ -36,7 +37,8 @@ def main(argv):
     # Generate API Configuration
     configure_api(api_config_file_path)
 
-    
-        
+    SampleFuzzer()
+
+
 if __name__ == '__main__':
     main(sys.argv[1:])
