@@ -12,7 +12,7 @@ class DataTypeNotAccepted(Exception):
 
 class DataType:
     """
-    Defines the accepted types of HTTP Methods
+    Defines the accepted types of payload data types
     """
 
     DATA_TYPES = (
