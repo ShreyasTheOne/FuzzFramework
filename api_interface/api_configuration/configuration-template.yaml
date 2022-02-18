@@ -1,0 +1,73 @@
+title: # Name of API
+description: # Brief description about the API
+base_url: # Base of all enpoint URls.
+
+endpoints:
+  endpoint_1:
+    path: # Path after base URL
+    method: # HTTP Request Method
+    request_headers: 
+      # header_1:
+      # header_2:
+    payload: # An object
+      data_type: # Pythonic data types: list|dict|int|str|bool|None
+      exact: # Boolean value to define if payload must match exactly as configured
+      payload: # In case of nested data structures like list and dict
+    responses:
+      status: # An integer
+        data: # Data expected with current status code
+          data_type: # Pythonic data types: list|dict|int|str|bool|None
+          exact: # Boolean value to define if payload must match exactly as configured
+          payload: # In case of nested data structures like list and dict
+        headers:
+          header_1:
+          header_2:
+
+
+
+# Examples of data objects
+#
+# data_type: dict
+# field:
+#   item_1:
+#     data_type:
+#     exact: 
+#     field:
+#
+# data_type: list
+# field:
+#   data_type:
+#   exact: 
+#   field:
+#
+# data_type: str
+# exact:
+# field:
+#
+# data_type: int
+# exact:
+# field:
+#
+# data_type: bool
+# exact:
+# field:
+#
+#
+#
+# Examples of response objects
+#
+# responses:
+#   200:
+#     data:
+#       data_type:
+#       exact:
+#       payload:
+#     headers:
+#       header_1:
+#   400:
+#     data:
+#       data_type:
+#       exact:
+#       payload:
+#     headers:
+#       header_1:
