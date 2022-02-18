@@ -7,13 +7,13 @@ class RequestEngine:
     send requests the API using the given   
     """
 
-    def __init__(self):
+    def __init__(self, endpoint_name):
         """
         Initialise request
         """
 
         self.API_CONFIGURATION = api_configuration.API_CONFIGURATION.structure
-
+        self.endpoint_name = endpoint_name
     
     def send_request(
         self, 
