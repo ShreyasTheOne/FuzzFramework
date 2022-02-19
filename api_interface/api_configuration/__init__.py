@@ -108,6 +108,10 @@ class APIConfiguration:
         except DataTypeNotAccepted as E:
             print(str(E))
             raise Exception
+        except KeyError as E:
+            if raw_payload:
+                print(f"Key {E} not found in payload {raw_payload}")
+                return
         else:
             exact = raw_payload.get('exact', False)
             try:

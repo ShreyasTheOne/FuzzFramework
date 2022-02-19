@@ -6,6 +6,7 @@ class BaseDataGenerator(ABC):
     def __init__(self):
         pass
 
+    @staticmethod
     @abstractmethod
-    def generate(self):
+    def generate():
         pass
