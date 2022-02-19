@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Super-Duper-Fuzzer
-sample-configuration.yaml
+playground/
