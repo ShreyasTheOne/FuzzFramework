@@ -1,3 +1,4 @@
+import os
 import textwrap
 from os import path, remove as remove_file
 from requests import request
@@ -5,6 +6,8 @@ from requests.exceptions import JSONDecodeError
 
 from api_interface import api_configuration
 from api_interface.constants import HTTPMethod
+
+import sys
 
 
 class RequestEngine:
@@ -91,8 +94,7 @@ class RequestEngine:
 
         FOLDER_PATH = "playground/logs"
         if not (path.exists(FOLDER_PATH) and path.isdir(FOLDER_PATH)):
-            print(f"Unable to find folder at {FOLDER_PATH}")
-            sys.exit(2)
+            os.mkdir(FOLDER_PATH)
 
         FILE_NAME = f"{str(self.endpoint_name)}.log"
         FILE_PATH = path.join(FOLDER_PATH, FILE_NAME)
