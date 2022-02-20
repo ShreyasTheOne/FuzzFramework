@@ -2,7 +2,6 @@ import sys
 from getopt import getopt, GetoptError
 
 from api_interface.api_configuration import configure as configure_api
-from api_interface.request_engine import RequestEngine
 
 from core.sample_fuzzer import SampleFuzzer
 
