@@ -54,10 +54,7 @@ class SampleFuzzer:
         elif payloadStructure["data_type"] == str:
             return StrGenerator.generate()
         elif payloadStructure["data_type"] == list:
-            return [
-                self.generatePayload(payloadStructure["payload"])
-                for _ in range(randrange(upperLimitList))
-            ]
+            return [self.generatePayload(payloadStructure["payload"]) for _ in range(randrange(upperLimitList))]
         elif payloadStructure["data_type"] == dict:
             payload = {}
             for key, value in payloadStructure["payload"].items():

@@ -17,14 +17,14 @@ def main(argv):
     """
 
     try:
-        opts, args = getopt(argv, 'hc:', ['help', 'api-config'])
+        opts, args = getopt(argv, "hc:", ["help", "api-config"])
     except GetoptError:
         print(HELP_TEXT)
         sys.exit(2)
 
     api_config_file_path = None
     for opt, arg in opts:
-        if opt in ['-c', '--api-config']:
+        if opt in ["-c", "--api-config"]:
             api_config_file_path = arg
         else:
             print(HELP_TEXT)
@@ -40,5 +40,5 @@ def main(argv):
     SampleFuzzer()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])
