@@ -1,11 +1,10 @@
 import os
 import textwrap
-from os import path, remove as remove_file
+from os import path
 from requests import request
 from requests.exceptions import JSONDecodeError
 
 from api_interface import api_configuration
-from api_interface.constants import HTTPMethod
 
 import sys
 

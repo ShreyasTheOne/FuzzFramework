@@ -15,7 +15,7 @@ class APIConfiguration:
     Python data object
     """
 
-    def __init__(self, file_path):
+    def __init__(self, file_path):  # noqa: C901
         """
         Processes configuration file provided as input
         :param file_path: Path to configuration file
@@ -73,7 +73,7 @@ class APIConfiguration:
                 try:
                     response_data = self.__parse_payload_object(data)
                 except Exception as E:
-                    print(f"Error in parsing response data")
+                    print("Error in parsing response data")
                     print(E)
                     return
 
@@ -95,7 +95,7 @@ class APIConfiguration:
             "endpoints": parsed_endpoints,
         }
 
-    def __parse_payload_object(self, raw_payload):
+    def __parse_payload_object(self, raw_payload):  # noqa: C901
         """
         Converts raw payload object from configuration file to python data type
 
