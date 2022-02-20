@@ -130,3 +130,7 @@ dmypy.json
 
 # Super-Duper-Fuzzer
 playground/
+
+# IDE-maintained configuration management files
+.vscode/
+.idea/

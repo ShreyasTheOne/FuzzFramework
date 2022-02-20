@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: Linter-Formatter Pre-Commit
 
 on:
   push:
@@ -22,28 +22,19 @@ jobs:
         python-version: "3.10"
     - name: Install Poetry
       run: |
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
         poetry self update
-    - name: Cache Poetry virtualenv
-      uses: actions/cache@v2
-      id: cache
-      with:
-        path: ~/.virtualenvs
-        key: poetry=${{ hashFiles('**/poetry.lock') }}
-        restore-keys: poetry-${{ hashFiles('**/poetry.lock') }}
-    - name: Set Poetry Config
+    - name: Setup up virtualenv
       run: |
-        poetry config settings.virtualenvs.in-project false
-        poetry config settings.virtualenvs.path ~/.virtualenvs
+        poetry env use 3.10
     - name: Install dependencies
       run: poetry install
-      if: steps.cache.outputs.cache-hit ~= 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
+    - name: Code Quality
+      run: poetry run black . --check
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings.
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=79 --statistics
-    - name: Code Quality
-      run: poetry run black . --check
+        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        poetry run flake8 . --count --max-complexity=10 --max-line-length=79 --statistics
     # Add a testing step if required
