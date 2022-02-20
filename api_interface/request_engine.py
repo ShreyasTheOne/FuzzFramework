@@ -13,7 +13,7 @@ import sys
 class RequestEngine:
     """
     This class contains methods used to
-    send requests the API using the given   
+    send requests the API using the given
     """
 
     def __init__(self, endpoint_name):
@@ -26,12 +26,12 @@ class RequestEngine:
 
         # Extract configuration for endpoint to store in class variables
         api_structure = api_configuration.API_CONFIGURATION.structure
-        self.endpoint_configuration = api_structure['endpoints'][endpoint_name]
+        self.endpoint_configuration = api_structure["endpoints"][endpoint_name]
 
         # Where to send request?
-        base_url = api_structure['base_url']
-        path = self.endpoint_configuration['path']
-        self.request_URL = f'{base_url}{path}'
+        base_url = api_structure["base_url"]
+        path = self.endpoint_configuration["path"]
+        self.request_URL = f"{base_url}{path}"
 
     def send_request(
         self,
@@ -47,9 +47,9 @@ class RequestEngine:
         """
 
         if headers is None:
-            headers = self.endpoint_configuration['request_headers']
+            headers = self.endpoint_configuration["request_headers"]
 
-        method = self.endpoint_configuration['method']
+        method = self.endpoint_configuration["method"]
 
         response = request(
             method=method,
@@ -70,16 +70,16 @@ class RequestEngine:
 
         self.__log_details(
             request={
-                'headers': headers,
-                'params': params,
-                'data': data,
-                'json': json,
+                "headers": headers,
+                "params": params,
+                "data": data,
+                "json": json,
             },
             response={
-                'status': response_status,
-                'data': response_json,
-                'headers': response_headers,
-            }
+                "status": response_status,
+                "data": response_json,
+                "headers": response_headers,
+            },
         )
 
     def __log_details(self, request, response):
@@ -104,10 +104,7 @@ class RequestEngine:
             if path.isfile(FILE_PATH):
                 log_file = open(FILE_PATH, "a")
             else:
-                print(
-                    f"Unrecognised file type for logs of endpoint "
-                    f"{self.endpoint_name} at {FOLDER_PATH}!"
-                )
+                print(f"Unrecognised file type for logs of endpoint " f"{self.endpoint_name} at {FOLDER_PATH}!")
                 sys.exit(2)
         else:
             log_file = open(FILE_PATH, "w")
@@ -116,8 +113,7 @@ class RequestEngine:
         _N_O_N_E_ = "_"
 
         # Write results to log file
-        log_string = \
-        f"""
+        log_string = f"""
         ---------------
         Request Details
         ---------------
@@ -133,6 +129,6 @@ class RequestEngine:
         Data: {str(response['data']) if response['data'] else _N_O_N_E_}
         \n\n
         """
-        
+
         log_file.write(textwrap.dedent(log_string))
         log_file.close()

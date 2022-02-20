@@ -5,30 +5,24 @@ class HTTPMethodNotAccepted(Exception):
 
     def __init__(self, invalid_method):
         self.invalid_method = invalid_method
-    
+
     def __str__(self):
         return f"Unrecognised or unaccepted HTTP Method {self.invalid_method}"
+
 
 class HTTPMethod:
     """
     Defines the accepted types of HTTP Methods
     """
-    
-    OPTIONS = 'OPTIONS'
-    GET = 'GET'
-    POST = 'POST'
-    PATCH = 'PATCH'
-    PUT = 'PUT'
-    DELETE = 'DELETE'
 
-    METHODS = [
-        OPTIONS,
-        GET,
-        POST,
-        PATCH,
-        PUT,
-        DELETE
-    ]
+    OPTIONS = "OPTIONS"
+    GET = "GET"
+    POST = "POST"
+    PATCH = "PATCH"
+    PUT = "PUT"
+    DELETE = "DELETE"
+
+    METHODS = [OPTIONS, GET, POST, PATCH, PUT, DELETE]
 
     @classmethod
     def validate(cls, method, silent=True):

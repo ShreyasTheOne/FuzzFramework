@@ -2,10 +2,10 @@ import io
 import yaml
 
 from api_interface.constants import (
-    HTTPMethod, 
+    HTTPMethod,
     DataType,
-    DataTypeNotAccepted, 
-    HTTPMethodNotAccepted
+    DataTypeNotAccepted,
+    HTTPMethodNotAccepted,
 )
 
 
@@ -23,29 +23,29 @@ class APIConfiguration:
 
         # Load file contents
         try:
-            with io.open(file_path, 'r') as stream:
+            with io.open(file_path, "r") as stream:
                 API_CONFIG = yaml.safe_load(stream)
         except Exception as E:
             print(E)
             return
 
         # Parse endpoints configuration
-        endpoints = API_CONFIG.get('endpoints', None)
+        endpoints = API_CONFIG.get("endpoints", None)
         if not endpoints:
-            return 
-        
+            return
+
         parsed_endpoints = dict()
         for name, endpoint in endpoints.items():
             # Validate request method type
-            method = endpoint.get('method', None)
+            method = endpoint.get("method", None)
             try:
                 parsed_method = HTTPMethod.validate(method)
             except HTTPMethodNotAccepted as E:
                 print(E)
                 return
-            
+
             # Validate request payload configuration
-            payload = endpoint.get('payload', None)
+            payload = endpoint.get("payload", None)
             try:
                 parsed_payload = self.__parse_payload_object(payload)
             except Exception as E:
@@ -54,11 +54,11 @@ class APIConfiguration:
                 return
 
             # Validate response payload configuration
-            responses = endpoint.get('responses', None)
+            responses = endpoint.get("responses", None)
             if not responses:
                 print("Responses list not provided")
                 return
-            
+
             parsed_responses = dict()
             for status, detail in responses.items():
                 # Valid response status
@@ -69,30 +69,30 @@ class APIConfiguration:
                     return
 
                 # Validate response data configuration
-                data = detail.get('data', None)
+                data = detail.get("data", None)
                 try:
                     response_data = self.__parse_payload_object(data)
                 except Exception as E:
                     print(f"Error in parsing response data")
                     print(E)
                     return
-                
+
                 parsed_responses[response_status] = {
                     **detail,
-                    'data': response_data,
+                    "data": response_data,
                 }
 
             # Update contents in parsed_endpoints
             parsed_endpoints[name] = {
                 **endpoint,
-                'method': parsed_method,
-                'payload': parsed_payload,
-                'responses': parsed_responses,
+                "method": parsed_method,
+                "payload": parsed_payload,
+                "responses": parsed_responses,
             }
-        
+
         self.structure = {
             **API_CONFIG,
-            'endpoints': parsed_endpoints,
+            "endpoints": parsed_endpoints,
         }
 
     def __parse_payload_object(self, raw_payload):
@@ -104,7 +104,7 @@ class APIConfiguration:
         """
 
         try:
-            pythonic_data_type = DataType.get_data_type(raw_payload['data_type'])
+            pythonic_data_type = DataType.get_data_type(raw_payload["data_type"])
         except DataTypeNotAccepted as E:
             print(str(E))
             raise Exception
@@ -113,7 +113,7 @@ class APIConfiguration:
                 print(f"Key {E} not found in payload {raw_payload}")
                 return
         else:
-            exact = raw_payload.get('exact', False)
+            exact = raw_payload.get("exact", False)
             try:
                 exact = bool(exact)
             except Exception:
@@ -122,18 +122,18 @@ class APIConfiguration:
             payload = None
             if pythonic_data_type in [str, int, bool, None]:
                 if exact:
-                    payload = raw_payload['payload']
+                    payload = raw_payload["payload"]
             elif pythonic_data_type == dict:
                 payload = dict()
-                for key, item in raw_payload['payload'].items():
+                for key, item in raw_payload["payload"].items():
                     payload[key] = self.__parse_payload_object(item)
             elif pythonic_data_type == list:
-                payload = self.__parse_payload_object(raw_payload['payload'])
+                payload = self.__parse_payload_object(raw_payload["payload"])
 
             return {
-                'data_type': pythonic_data_type,
-                'exact': exact,
-                'payload': payload
+                "data_type": pythonic_data_type,
+                "exact": exact,
+                "payload": payload,
             }
 
 

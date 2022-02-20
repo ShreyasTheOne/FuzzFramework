@@ -5,7 +5,7 @@ class DataTypeNotAccepted(Exception):
 
     def __init__(self, invalid_data_type):
         self.invalid_data_type = invalid_data_type
-    
+
     def __str__(self):
         return f"Unrecognised or unaccepted data type {self.invalid_data_type}"
 
@@ -16,12 +16,12 @@ class DataType:
     """
 
     DATA_TYPES = (
-        ('int', int),
-        ('str', str),
-        ('list', list),
-        ('dict', dict),
-        ('bool', bool),
-        ('None', None),
+        ("int", int),
+        ("str", str),
+        ("list", list),
+        ("dict", dict),
+        ("bool", bool),
+        ("None", None),
     )
 
     @classmethod
@@ -36,5 +36,5 @@ class DataType:
         for tup in cls.DATA_TYPES:
             if data_type == tup[0]:
                 return tup[1]
-        
+
         raise DataTypeNotAccepted(data_type)
