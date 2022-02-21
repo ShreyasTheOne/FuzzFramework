@@ -10,10 +10,23 @@ from core.sample_fuzzer.data_generators import (
 
 
 class SampleFuzzer:
-    def __init__(self):
+    """
+    A basic fuzzer that sends data as described in the API Configuration.
+    """
+
+    def __init__(self, iterations=None):
+        """
+        Initialise SampleFuzzer instance with the API Configuration
+
+        Args:
+            iterations (int): Number of requests to send per endpoint
+        """
+
         self._API_CONFIGURATION = api_configuration.API_CONFIGURATION.structure
         self._endpoints = self._API_CONFIGURATION["endpoints"]
         self._requestEngines = {}
+
+        self.iterations = iterations if iterations else 100
 
         # Generate request engines
         for endpointName, endpointDetails in self._endpoints.items():
@@ -30,15 +43,16 @@ class SampleFuzzer:
         requestMethod = endpointDetails["method"]
         payloadStructure = endpointDetails["payload"]
 
-        payloadGenerated = self.generatePayload(payloadStructure)
+        for _ in range(self.iterations):
+            payloadGenerated = self.generatePayload(payloadStructure)
 
-        if requestMethod == "GET":
-            # Query params
-            requestEngine.send_request(params=payloadGenerated)
-        elif requestMethod in ["PUT", "POST", "UPDATE"]:
-            requestEngine.send_request(json=payloadGenerated)
-        elif requestMethod in ["DELETE", "OPTIONS"]:
-            requestEngine.send_request()
+            if requestMethod == "GET":
+                # Query params
+                requestEngine.send_request(params=payloadGenerated)
+            elif requestMethod in ["PUT", "POST", "UPDATE"]:
+                requestEngine.send_request(json=payloadGenerated)
+            elif requestMethod in ["DELETE", "OPTIONS"]:
+                requestEngine.send_request()
 
     def generatePayload(self, payloadStructure, upperLimitList=5):
         if payloadStructure is None:
