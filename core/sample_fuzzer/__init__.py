@@ -1,7 +1,9 @@
 from random import randrange
-from api_interface import api_configuration
+
 from api_interface.request_engine import RequestEngine
 from api_interface.constants import DataTypeNotAccepted
+
+from core.base import BaseFuzzer
 from core.sample_fuzzer.data_generators import (
     BoolGenerator,
     IntGenerator,
@@ -9,7 +11,7 @@ from core.sample_fuzzer.data_generators import (
 )
 
 
-class SampleFuzzer:
+class SampleFuzzer(BaseFuzzer):
     """
     A basic fuzzer that sends data as described in the API Configuration.
     """
@@ -22,12 +24,10 @@ class SampleFuzzer:
             iterations (int): Number of requests to send per endpoint
         """
 
-        self._API_CONFIGURATION = api_configuration.API_CONFIGURATION.structure
-        self._endpoints = self._API_CONFIGURATION["endpoints"]
+        super().__init__(iterations)
+
         self._requestEngines = {}
-
-        self.iterations = iterations if iterations else 100
-
+        
         # Generate request engines
         for endpointName, endpointDetails in self._endpoints.items():
             self._requestEngines[endpointName] = RequestEngine(endpointName)
