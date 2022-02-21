@@ -7,12 +7,14 @@ from core.sample_fuzzer import SampleFuzzer
 
 HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml\n\n"
 
+
 def run_fuzzer(fuzzer_type: str, iterations: int):
 
     if fuzzer_type == "sample":
         SampleFuzzer(iterations)
     else:
         sys.exit(f"Invalid fuzzer type {fuzzer_type}")
+
 
 def main(argv):
     """
@@ -23,12 +25,7 @@ def main(argv):
 
     # Extract list of command line arguments
     short_options = "hc:f:i:"
-    long_options = [
-        "help",
-        "api-config",
-        "fuzzer-type",
-        "iterations"
-    ]
+    long_options = ["help", "api-config", "fuzzer-type", "iterations"]
 
     try:
         opts, args = getopt(argv, short_options, long_options)

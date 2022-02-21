@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from api_interface import api_configuration
 
+
 class BaseFuzzer(ABC):
-    
     @abstractmethod
     def __init__(self, iterations=None):
         """
