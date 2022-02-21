@@ -1,4 +1,5 @@
 import io
+import sys
 import yaml
 
 from api_interface.constants import (
@@ -26,8 +27,7 @@ class APIConfiguration:
             with io.open(file_path, "r") as stream:
                 API_CONFIG = yaml.safe_load(stream)
         except Exception as E:
-            print(E)
-            return
+            sys.exit(E)
 
         # Parse endpoints configuration
         endpoints = API_CONFIG.get("endpoints", None)
@@ -41,23 +41,21 @@ class APIConfiguration:
             try:
                 parsed_method = HTTPMethod.validate(method)
             except HTTPMethodNotAccepted as E:
-                print(E)
+                sys.exit(E)
                 return
 
             # Validate request payload configuration
             payload = endpoint.get("payload", None)
             try:
                 parsed_payload = self.__parse_payload_object(payload)
-            except Exception as E:
-                print(f"Error in parsing payload for endpoint {name}")
-                print(E)
-                return
+            except Exception:
+                sys.exit(f"\nThe above error in parsing payload for endpoint {name}")
+                
 
             # Validate response payload configuration
             responses = endpoint.get("responses", None)
             if not responses:
-                print("Responses list not provided")
-                return
+                sys.exit("Responses list not provided")
 
             parsed_responses = dict()
             for status, detail in responses.items():
@@ -65,17 +63,14 @@ class APIConfiguration:
                 try:
                     response_status = int(status)
                 except Exception as E:
-                    print(E)
-                    return
+                    sys.exit(E)
 
                 # Validate response data configuration
                 data = detail.get("data", None)
                 try:
                     response_data = self.__parse_payload_object(data)
-                except Exception as E:
-                    print("Error in parsing response data")
-                    print(E)
-                    return
+                except Exception:
+                    sys.exit("\nThe above error occurred while parsing response data")
 
                 parsed_responses[response_status] = {
                     **detail,
@@ -109,9 +104,8 @@ class APIConfiguration:
             print(str(E))
             raise Exception
         except KeyError as E:
-            if raw_payload:
-                print(f"Key {E} not found in payload {raw_payload}")
-                return
+            print(f"Key {E} not found in payload {raw_payload}")
+            raise Exception
         else:
             exact = raw_payload.get("exact", False)
             try:

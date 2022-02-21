@@ -1,4 +1,4 @@
-import os
+import sys
 import textwrap
 from os import path
 from requests import request
@@ -6,7 +6,6 @@ from requests.exceptions import JSONDecodeError
 
 from api_interface import api_configuration
 
-import sys
 
 
 class RequestEngine:
@@ -93,7 +92,7 @@ class RequestEngine:
 
         FOLDER_PATH = "playground/logs"
         if not (path.exists(FOLDER_PATH) and path.isdir(FOLDER_PATH)):
-            os.mkdir(FOLDER_PATH)
+            sys.exit(f"Directory not found at path {FOLDER_PATH}!")
 
         FILE_NAME = f"{str(self.endpoint_name)}.log"
         FILE_PATH = path.join(FOLDER_PATH, FILE_NAME)
@@ -103,8 +102,10 @@ class RequestEngine:
             if path.isfile(FILE_PATH):
                 log_file = open(FILE_PATH, "a")
             else:
-                print(f"Unrecognised file type for logs of endpoint " f"{self.endpoint_name} at {FOLDER_PATH}!")
-                sys.exit(2)
+                sys.exit(
+                    f"Unrecognised file type for logs of endpoint " 
+                    f"{self.endpoint_name} at {FOLDER_PATH}!"
+                )
         else:
             log_file = open(FILE_PATH, "w")
 
