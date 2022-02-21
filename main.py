@@ -46,7 +46,7 @@ def main(argv):
         elif opt in ["-f", "--fuzzer-type"]:
             fuzzer_type = arg
         elif opt in ["-i", "--iterations"]:
-            iterations = arg
+            iterations = int(arg)
         else:
             print(HELP_TEXT)
             sys.exit(2)
