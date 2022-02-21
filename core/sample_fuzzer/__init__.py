@@ -1,7 +1,9 @@
 from random import randrange
-from api_interface import api_configuration
+
 from api_interface.request_engine import RequestEngine
 from api_interface.constants import DataTypeNotAccepted
+
+from core.base import BaseFuzzer
 from core.sample_fuzzer.data_generators import (
     BoolGenerator,
     IntGenerator,
@@ -9,10 +11,21 @@ from core.sample_fuzzer.data_generators import (
 )
 
 
-class SampleFuzzer:
-    def __init__(self):
-        self._API_CONFIGURATION = api_configuration.API_CONFIGURATION.structure
-        self._endpoints = self._API_CONFIGURATION["endpoints"]
+class SampleFuzzer(BaseFuzzer):
+    """
+    A basic fuzzer that sends data as described in the API Configuration.
+    """
+
+    def __init__(self, iterations=None):
+        """
+        Initialise SampleFuzzer instance with the API Configuration
+
+        Args:
+            iterations (int): Number of requests to send per endpoint
+        """
+
+        super().__init__(iterations)
+
         self._requestEngines = {}
 
         # Generate request engines
@@ -30,15 +43,16 @@ class SampleFuzzer:
         requestMethod = endpointDetails["method"]
         payloadStructure = endpointDetails["payload"]
 
-        payloadGenerated = self.generatePayload(payloadStructure)
+        for _ in range(self.iterations):
+            payloadGenerated = self.generatePayload(payloadStructure)
 
-        if requestMethod == "GET":
-            # Query params
-            requestEngine.send_request(params=payloadGenerated)
-        elif requestMethod in ["PUT", "POST", "UPDATE"]:
-            requestEngine.send_request(json=payloadGenerated)
-        elif requestMethod in ["DELETE", "OPTIONS"]:
-            requestEngine.send_request()
+            if requestMethod == "GET":
+                # Query params
+                requestEngine.send_request(params=payloadGenerated)
+            elif requestMethod in ["PUT", "POST", "UPDATE"]:
+                requestEngine.send_request(json=payloadGenerated)
+            elif requestMethod in ["DELETE", "OPTIONS"]:
+                requestEngine.send_request()
 
     def generatePayload(self, payloadStructure, upperLimitList=5):
         if payloadStructure is None:

@@ -9,13 +9,12 @@ class StrGenerator(BaseDataGenerator):
         # random length
         # min_number = 0
         # max_number = 100
-        
+
         random_string_length = IntGenerator().generate()
 
         # string of random uppercase & lowercase alphabets
         random_string = "".join(
-            random.choice(string.ascii_uppercase + string.ascii_lowercase)
-            for x in range(random_string_length)
+            random.choice(string.ascii_uppercase + string.ascii_lowercase) for x in range(random_string_length)
         )
 
         # covert the string to list & shuffle the list

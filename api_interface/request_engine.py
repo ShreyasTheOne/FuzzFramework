@@ -7,7 +7,6 @@ from requests.exceptions import JSONDecodeError
 from api_interface import api_configuration
 
 
-
 class RequestEngine:
     """
     This class contains methods used to
@@ -102,10 +101,7 @@ class RequestEngine:
             if path.isfile(FILE_PATH):
                 log_file = open(FILE_PATH, "a")
             else:
-                sys.exit(
-                    f"Unrecognised file type for logs of endpoint " 
-                    f"{self.endpoint_name} at {FOLDER_PATH}!"
-                )
+                sys.exit(f"Unrecognised file type for logs of endpoint " f"{self.endpoint_name} at {FOLDER_PATH}!")
         else:
             log_file = open(FILE_PATH, "w")
 
