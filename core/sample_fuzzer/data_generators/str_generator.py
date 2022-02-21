@@ -7,8 +7,9 @@ from core.sample_fuzzer.data_generators.int_generator import IntGenerator
 class StrGenerator(BaseDataGenerator):
     def generate(self):
         # random length
-        min_number = 0
-        max_number = 100
+        # min_number = 0
+        # max_number = 100
+        
         random_string_length = IntGenerator().generate()
 
         # string of random uppercase & lowercase alphabets
