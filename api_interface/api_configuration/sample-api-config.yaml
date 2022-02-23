@@ -1,0 +1,50 @@
+title: Floo # Name of API
+description: Meeting Web Application # Brief description about the API
+base_url: http://localhost:54321/api/ # Base of all enpoint URls.
+
+endpoints:
+  create_new_meeting:
+    path: meeting/new/
+    method: GET 
+    request_headers:
+    payload: 
+      data_type: dict
+      fuzz_prob: 1 # Always fuzz
+      payload: 
+        team:
+          data_type: str
+          fuzz_prob: 0.2
+          payload: null
+          seeds:
+            - mdcftg
+            - mabskk
+            - ktf68a
+            - oam0ak
+        attendees:
+          data_type: list
+          fuzz_prob: 0.8
+          payload:
+            data_type: str
+            fuzz_prob: 1
+            payload: null
+            seeds: # Seeds for list
+              - item1
+              - item2
+              - item3
+              - item4
+        meeting_size:
+          data_type: int
+          fuzz_prob: 0 # Never fuzz, always stay within min and max
+          payload: null
+          seeds:
+            min: 0
+            max: 100
+    responses:
+      201: 
+        data: 
+          data_type: dict
+          payload:
+            code:
+              data_type: str
+              payload: null
+  
