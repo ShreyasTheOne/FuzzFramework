@@ -57,8 +57,6 @@ class SampleFuzzer(BaseFuzzer):
     def generatePayload(self, payloadStructure, upperLimitList=5):
         if payloadStructure is None:
             return None
-        if payloadStructure["exact"]:
-            return payloadStructure["payload"]
         if payloadStructure["data_type"] is None:
             return None
         if payloadStructure["data_type"] == bool:

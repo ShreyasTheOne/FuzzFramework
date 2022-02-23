@@ -5,7 +5,8 @@ from core.sample_fuzzer.data_generators.int_generator import IntGenerator
 
 
 class StrGenerator(BaseDataGenerator):
-    def generate(self):
+    @classmethod
+    def generate(cls):
         # random length
         # min_number = 0
         # max_number = 100

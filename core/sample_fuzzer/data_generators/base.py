@@ -7,5 +7,5 @@ class BaseDataGenerator(ABC):
 
     @staticmethod
     @abstractmethod
-    def generate():
+    def generate(cls):
         pass
