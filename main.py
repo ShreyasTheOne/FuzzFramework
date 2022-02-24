@@ -4,6 +4,7 @@ from getopt import getopt, GetoptError
 from api_interface.api_configuration import configure as configure_api
 
 from core.sample_fuzzer import SampleFuzzer
+from core.mutation_fuzzer import MutationFuzzer
 
 HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml\n\n"
 
@@ -12,6 +13,8 @@ def run_fuzzer(fuzzer_type: str, iterations: int):
 
     if fuzzer_type == "sample":
         SampleFuzzer(iterations)
+    elif fuzzer_type == "mutation":
+        MutationFuzzer(iterations=iterations)
     else:
         sys.exit(f"Invalid fuzzer type {fuzzer_type}")
 

@@ -1,7 +1,7 @@
 from random import random
 
-class BaseGenerator:
 
+class BaseGenerator:
     def _should_fuzz(self):
         """
         Based on the fuzz probability,
