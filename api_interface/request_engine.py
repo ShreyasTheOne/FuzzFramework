@@ -13,13 +13,16 @@ class RequestEngine:
     send requests the API using the given
     """
 
-    def __init__(self, endpoint_name):
+    def __init__(self, endpoint_name, fuzzer_type=""):
         """
         Initialise request
         """
 
         # Endpoint name for logs
         self.endpoint_name = endpoint_name
+
+        # Fuzzer type for log file name
+        self.fuzzer_type = fuzzer_type
 
         # Extract configuration for endpoint to store in class variables
         api_structure = api_configuration.API_CONFIGURATION.structure
@@ -93,7 +96,7 @@ class RequestEngine:
         if not (path.exists(FOLDER_PATH) and path.isdir(FOLDER_PATH)):
             sys.exit(f"Directory not found at path {FOLDER_PATH}!")
 
-        FILE_NAME = f"{str(self.endpoint_name)}.log"
+        FILE_NAME = f"{str(self.fuzzer_type)}_{str(self.endpoint_name)}.log"
         FILE_PATH = path.join(FOLDER_PATH, FILE_NAME)
 
         log_file = None
