@@ -12,7 +12,7 @@ class MutationFuzzer(BaseFuzzer):
     Mutation Fuzzer
     """
 
-    def __init__(self, iterations=None, min_mutations: int = 1, max_mutations: int = 5) -> None:
+    def __init__(self, iterations=None, min_mutations: int = 2, max_mutations: int = 10) -> None:
 
         super().__init__(iterations)
 
@@ -26,12 +26,10 @@ class MutationFuzzer(BaseFuzzer):
 
     def fuzz(self) -> None:
         for endpoint_name, endpoint_config in self.configuration.items():
-
             for _ in range(self.iterations):
                 payloadGenerated = self.generatePayload(endpoint_config["payload_configuration"])
 
                 if endpoint_config["request_method"] == "GET":
-                    # Query params
                     endpoint_config["request_engine"].send_request(params=payloadGenerated)
                 elif endpoint_config["request_method"] in ["PUT", "POST", "UPDATE"]:
                     endpoint_config["request_engine"].send_request(json=payloadGenerated)
@@ -56,7 +54,7 @@ class MutationFuzzer(BaseFuzzer):
 
         for endpointName, endpointDetails in self._endpoints.items():
             self.configuration[endpointName] = {
-                "request_engine": RequestEngine(endpointName),
+                "request_engine": RequestEngine(endpoint_name=endpointName, fuzzer_type="mutation"),
                 "request_method": endpointDetails["method"],
                 "payload_configuration": self.__initalizeConfiguration(endpointDetails["payload"]),
             }
@@ -65,13 +63,16 @@ class MutationFuzzer(BaseFuzzer):
         """
         Utility function to run DFS on the API configuration graph and return required configuration
         """
-        config = {"data_type": payload["data_type"], "generator": self.__createGeneratorInstance(payload)}
+        config = {
+            "data_type": payload["data_type"], 
+            "generator": self.__createGeneratorInstance(payload)
+        }
         if payload["data_type"] == dict:
             # Call function recursively for all children and create Generator Instances for them
             children = {}
             for key, value in payload["payload"].items():
                 children[key] = self.__initalizeConfiguration(value)
-            config = {**config, "children": children}
+            config["children"] = children
         return config
 
     def __createGeneratorInstance(self, payload):
@@ -93,17 +94,11 @@ class MutationFuzzer(BaseFuzzer):
                 fuzz_prob=payload["fuzz_prob"],
             )
         elif payload["data_type"] == list:
-            if payload["payload"]["data_type"] == str:
-                return ListGenerator(
-                    seeds=payload["payload"]["seeds"],
-                    data_type=payload["payload"]["data_type"],
-                    list_fuzz_prob=payload["fuzz_prob"],
-                    fuzz_prob=payload["payload"]["fuzz_prob"],
-                )
             return ListGenerator(
                 seeds=payload["payload"]["seeds"],
                 data_type=payload["payload"]["data_type"],
                 list_fuzz_prob=payload["fuzz_prob"],
+                fuzz_prob=payload["payload"]["fuzz_prob"],
             )
 
         return None

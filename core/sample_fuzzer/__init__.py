@@ -30,7 +30,7 @@ class SampleFuzzer(BaseFuzzer):
 
         # Generate request engines
         for endpointName, endpointDetails in self._endpoints.items():
-            self._requestEngines[endpointName] = RequestEngine(endpointName)
+            self._requestEngines[endpointName] = RequestEngine(endpoint_name=endpointName, fuzzer_type="sample")
 
         for endpointName, endpointDetails in self._endpoints.items():
             self.fuzz(self._requestEngines[endpointName], endpointName)

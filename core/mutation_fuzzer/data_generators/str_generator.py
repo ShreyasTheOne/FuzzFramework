@@ -35,6 +35,8 @@ class StrGenerator(BaseGenerator):
 
         value = choice(self.seeds)
         if self._should_fuzz():
+            # Record values for each generation, and analyse results,
+            # And choose optimal value (and/or range) to decide trial number.
             trials = randint(self.min_mutations, self.max_mutations)
             for _ in range(trials):
                 value = self.__mutate(value)

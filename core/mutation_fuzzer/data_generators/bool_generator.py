@@ -1,7 +1,6 @@
-import random
-
+from random import getrandbits
 
 class BoolGenerator:
     def generate(cls):
-        random_bool = bool(random.getrandbits(1))
+        random_bool = bool(getrandbits(1))
         return random_bool

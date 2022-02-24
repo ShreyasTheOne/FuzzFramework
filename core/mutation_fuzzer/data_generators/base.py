@@ -7,5 +7,5 @@ class BaseGenerator:
         Based on the fuzz probability,
         decide whether to fuzz or not
         """
-        rand = random()
+
         return random() < self.fuzz_prob
