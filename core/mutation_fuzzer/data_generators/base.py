@@ -8,5 +8,4 @@ class BaseGenerator:
         decide whether to fuzz or not
         """
         rand = random()
-        print(rand, self.fuzz_prob)
         return random() < self.fuzz_prob
