@@ -30,7 +30,7 @@ class SampleFuzzer(BaseFuzzer):
 
         # Generate request engines
         for endpointName, endpointDetails in self._endpoints.items():
-            self._requestEngines[endpointName] = RequestEngine(endpointName)
+            self._requestEngines[endpointName] = RequestEngine(endpoint_name=endpointName, fuzzer_type="sample")
 
         for endpointName, endpointDetails in self._endpoints.items():
             self.fuzz(self._requestEngines[endpointName], endpointName)
@@ -57,8 +57,6 @@ class SampleFuzzer(BaseFuzzer):
     def generatePayload(self, payloadStructure, upperLimitList=5):
         if payloadStructure is None:
             return None
-        if payloadStructure["exact"]:
-            return payloadStructure["payload"]
         if payloadStructure["data_type"] is None:
             return None
         if payloadStructure["data_type"] == bool:

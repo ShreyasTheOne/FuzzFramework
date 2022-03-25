@@ -3,7 +3,8 @@ from core.sample_fuzzer.data_generators.base import BaseDataGenerator
 
 
 class IntGenerator(BaseDataGenerator):
-    def generate(self):
+    @classmethod
+    def generate(cls):
         min_number = 0
         max_number = 100
         # random number
