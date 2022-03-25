@@ -1,6 +1,7 @@
 import sys
 import textwrap
-from os import path
+from datetime import datetime
+from os import path, mkdir
 from requests import request
 from requests.exceptions import JSONDecodeError
 
@@ -33,6 +34,9 @@ class RequestEngine:
         path = self.endpoint_configuration["path"]
         self.request_URL = f"{base_url}{path}"
 
+        # To name the 500 error log files
+        self._500_count = 0
+
     def send_request(
         self,
         headers=None,
@@ -62,10 +66,13 @@ class RequestEngine:
         )
 
         response_status = response.status_code
+        _500 = False
         try:
             response_json = response.json()
         except JSONDecodeError:
-            response_json = "Response not in json format"
+            response_html = response.text
+            response_json = f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500/{self._500_count}.html"
+            _500 = True
         response_headers = response.headers
 
         self.__log_details(
@@ -81,6 +88,9 @@ class RequestEngine:
                 "headers": response_headers,
             },
         )
+
+        if _500:
+            self.__log_500(response_html=response_html)
 
     def __log_details(self, request, response):
         """
@@ -131,3 +141,27 @@ class RequestEngine:
 
         log_file.write(textwrap.dedent(log_string))
         log_file.close()
+
+    def __log_500(self, response_html):
+        """
+        """
+
+        FOLDER_PATH = f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500"
+        if not (path.exists(FOLDER_PATH) and path.isdir(FOLDER_PATH)):
+            mkdir(FOLDER_PATH)
+        FILE_NAME = f"{self._500_count}.html"
+        FILE_PATH = path.join(FOLDER_PATH, FILE_NAME)
+
+        log_file = None
+        if path.exists(FILE_PATH):
+            if path.isfile(FILE_PATH):
+                log_file = open(FILE_PATH, "w")
+            else:
+                sys.exit(f"Unrecognised file type for logs of endpoint " f"{self.endpoint_name} at {FOLDER_PATH}!")
+        else:
+            log_file = open(FILE_PATH, "w")
+        
+        log_file.write(textwrap.dedent(response_html))
+        log_file.close()
+
+        self._500_count += 1
