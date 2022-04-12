@@ -12,6 +12,11 @@ endpoints:
       fuzz_prob: # Floating point value in range [0,1] defining how often to modify value
       payload: # In case of nested data structures like list and dict
       seeds: # List of seed inputs in case of mutation fuzzer
+      grammar: # Grammar in case of grammar fuzzer
+        min_nonterminals:
+        max_nonterminals:
+        expansions:
+        start:
     responses:
       status: # An integer
         data: # Data expected with current status code
