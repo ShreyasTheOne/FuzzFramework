@@ -5,6 +5,7 @@ from api_interface.api_configuration import configure as configure_api
 
 from core.sample_fuzzer import SampleFuzzer
 from core.mutation_fuzzer import MutationFuzzer
+from core.grammar_fuzzer import GrammarFuzzer
 
 HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml\n\n"
 
@@ -12,9 +13,11 @@ HELP_TEXT = "\n\nInstructions to use:\npython3 fuzz.py -c path/to/api-config.yml
 def run_fuzzer(fuzzer_type: str, iterations: int):
 
     if fuzzer_type == "sample":
-        SampleFuzzer(iterations)
+        SampleFuzzer(iterations=iterations)
     elif fuzzer_type == "mutation":
         MutationFuzzer(iterations=iterations)
+    elif fuzzer_type == "grammar":
+        GrammarFuzzer(iterations=iterations)
     else:
         sys.exit(f"Invalid fuzzer type {fuzzer_type}")
 
