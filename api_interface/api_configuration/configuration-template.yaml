@@ -1,7 +1,17 @@
 title: # Name of API
 description: # Brief description about the API
 base_url: # Base of all enpoint URls.
-csrftokenname: # Name of the CSRF Token
+csrftokenname: # Name of the CSRF Token cookie
+sessionidname: # Name of the session id cookie name
+
+users:
+  - name: user1
+    sessionid: # Session ID for user 1
+    csrftoken: # CSRF token for user 1
+  - name: user2
+    sessionid: # Session ID for user 2
+    csrftoken: # CSRF token for user 2
+    # A minimum of 2 users needed for checking IDOR using stateful API fuzzing
 
 endpoints:
   endpoint_1:

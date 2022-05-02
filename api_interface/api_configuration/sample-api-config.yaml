@@ -1,7 +1,17 @@
 title: Floo # Name of API
 description: Meeting Web Application # Brief description about the API
 base_url: http://localhost:54321/api/ # Base of all enpoint URls.
-csrftokenname: floo_csrftoken
+csrftokenname: floo_csrftoken # Name of the CSRF Token cookie
+sessionidname: floo_sessionid # Name of the session id cookie name
+
+users:
+  - name: user1
+    sessionid: .eJxVjEEOgjAQRe_StWmmLTMtLt17BjLDtIIaSCisjHdXEha6_e-9_zIdb-vQbTUv3ajmbII5_W7C_SNPO9A7T7fZ9vO0LqPYXbEHrfY6a35eDvfvYOA6fGvfRAIvySEDNQRcPPnImHyMVNShQ2iZMCi2STGDegkFqJXC4iSY9wekdTbY:1nlc3h:b3B0GoE9POLifA6PvHwvAYpyF0n7Ms4Haoihb_LIIP0 # Session ID for user 1
+    csrftoken: crrmPXXgpUqDncS4J3nFB1Z59ZbVUcVWQHy1u6sqIjE47ZgNcU79brYPhlbdwdsn # CSRF token for user 1
+  - name: user2
+    sessionid: .eJxVjEEOwiAQRe_C2hCgnYG6dO8ZmpkOSNVAUtqV8e7apAvd_vfef6mRtjWPW4vLOIs6K6tOvxvT9IhlB3Kncqt6qmVdZta7og_a9LVKfF4O9-8gU8vf2vUejeNggQz2aCg5dJ4gOO8xiQULZiCETmAIAtGI4y4ZHDgRW-7U-wOjQzbW:1nlc2v:hgybtec0t0I90FGZ-WIPHTzPCHvWQldb6GehBbCq-bo # Session ID for user 2
+    csrftoken: zrsI35GvwMjjmQKCcnmLUmdIngNZwS5NdDZDciAUI7zuUGELE1LAyLrcfBbJBtnd # CSRF token for user 2
+    # A minimum of 2 users needed for checking IDOR using stateful API fuzzing
 
 endpoints:
   create_new_meeting:
