@@ -1,6 +1,5 @@
 import sys
 import textwrap
-from datetime import datetime
 from os import path, mkdir
 from requests import request
 from requests.exceptions import JSONDecodeError
@@ -96,7 +95,12 @@ class RequestEngine:
             if _500:
                 self.__log_500(response_html=response_html)
 
-        return {"status": response_status, "headers": response_headers, "data": response_json}
+        return {
+            "status": response_status,
+            "headers": response_headers,
+            "data": response_json,
+            "cookies": response.cookies,
+        }
 
     def __log_details(self, request, response):
         """
