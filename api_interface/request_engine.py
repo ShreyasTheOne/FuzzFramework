@@ -43,6 +43,7 @@ class RequestEngine:
         params={},
         data={},
         json={},
+        log_details=True
         # cookies=None
     ):
         """
@@ -71,26 +72,31 @@ class RequestEngine:
             response_json = response.json()
         except JSONDecodeError:
             response_html = response.text
-            response_json = f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500/{self._500_count}.html"
+            response_json = (
+                f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500/{self._500_count}.html"
+            )
             _500 = True
         response_headers = response.headers
 
-        self.__log_details(
-            request={
-                "headers": headers,
-                "params": params,
-                "data": data,
-                "json": json,
-            },
-            response={
-                "status": response_status,
-                "data": response_json,
-                "headers": response_headers,
-            },
-        )
+        if log_details:
+            self.__log_details(
+                request={
+                    "headers": headers,
+                    "params": params,
+                    "data": data,
+                    "json": json,
+                },
+                response={
+                    "status": response_status,
+                    "data": response_json,
+                    "headers": response_headers,
+                },
+            )
 
-        if _500:
-            self.__log_500(response_html=response_html)
+            if _500:
+                self.__log_500(response_html=response_html)
+
+        return {"status": response_status, "headers": response_headers, "data": response_json}
 
     def __log_details(self, request, response):
         """
@@ -143,8 +149,7 @@ class RequestEngine:
         log_file.close()
 
     def __log_500(self, response_html):
-        """
-        """
+        """ """
 
         FOLDER_PATH = f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500"
         if not (path.exists(FOLDER_PATH) and path.isdir(FOLDER_PATH)):
@@ -160,7 +165,7 @@ class RequestEngine:
                 sys.exit(f"Unrecognised file type for logs of endpoint " f"{self.endpoint_name} at {FOLDER_PATH}!")
         else:
             log_file = open(FILE_PATH, "w")
-        
+
         log_file.write(textwrap.dedent(response_html))
         log_file.close()
 

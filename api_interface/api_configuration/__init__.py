@@ -143,13 +143,13 @@ class APIConfiguration:
 
         # If it is a grammar fuzzer, a grammar would be given
         config_grammar = raw_payload.get("grammar", None)
-        
+
         return {
-            "data_type": pythonic_data_type, 
+            "data_type": pythonic_data_type,
             "fuzz_prob": fuzz_prob,
-            "payload": payload, 
+            "payload": payload,
             "seeds": parsed_seeds,
-            "grammar": config_grammar
+            "grammar": config_grammar,
         }
 
     def __parse_responses_configuration(self, responses):

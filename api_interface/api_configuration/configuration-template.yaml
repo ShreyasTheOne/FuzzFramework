@@ -1,6 +1,7 @@
 title: # Name of API
 description: # Brief description about the API
 base_url: # Base of all enpoint URls.
+csrftokenname: # Name of the CSRF Token
 
 endpoints:
   endpoint_1:

@@ -32,6 +32,7 @@ class SampleFuzzer(BaseFuzzer):
         for endpointName, endpointDetails in self._endpoints.items():
             self._requestEngines[endpointName] = RequestEngine(endpoint_name=endpointName, fuzzer_type="sample")
 
+    def fuzz_all(self):
         for endpointName, endpointDetails in self._endpoints.items():
             self.fuzz(self._requestEngines[endpointName], endpointName)
 
