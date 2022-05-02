@@ -17,6 +17,7 @@ class DataType:
 
     DATA_TYPES = (
         ("int", int),
+        ("float", float),
         ("str", str),
         ("list", list),
         ("dict", dict),
