@@ -1,7 +1,7 @@
 from core.base import BaseFuzzer
 
 from api_interface.request_engine import RequestEngine
-from core.grammar_fuzzer.data_generators import BaseGenerator
+from core.grammar_fuzzer.data_generators import BaseGrammarGenerator
 
 
 class GrammarFuzzer(BaseFuzzer):
@@ -9,16 +9,16 @@ class GrammarFuzzer(BaseFuzzer):
     Grammar Fuzzer
     """
 
+    generator_class = BaseGrammarGenerator
+
     def __init__(self, iterations=None) -> None:
         super().__init__(iterations)
 
         self._requestEngines = dict()
 
         # Generate request engines
-        for endpointName, endpointDetails in self._endpoints.items():
+        for endpointName in self._endpoints.keys():
             self._requestEngines[endpointName] = RequestEngine(endpoint_name=endpointName, fuzzer_type="grammar")
-
-        for endpointName, endpointDetails in self._endpoints.items():
             self.fuzz(self._requestEngines[endpointName], endpointName)
 
     def fuzz(self, requestEngine, endpointName) -> None:
@@ -46,7 +46,11 @@ class GrammarFuzzer(BaseFuzzer):
         payload = dict()
         for key, details in payloadStructure["payload"].items():
             if key not in self.dataGenerators:
-                self.dataGenerators[key] = BaseGenerator(details["grammar"])
+                self.dataGenerators[key] = self.generator_class(
+                    details["grammar"],
+                    details["data_type"]
+                )
+
             payload[key] = self.dataGenerators[key].generate()
         
         return payload
