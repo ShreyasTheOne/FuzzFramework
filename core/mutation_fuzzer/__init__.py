@@ -22,9 +22,7 @@ class MutationFuzzer(BaseFuzzer):
 
         self.initializeConfiguration()
 
-        self.fuzz()
-
-    def fuzz(self) -> None:
+    def fuzz_all(self) -> None:
         for endpoint_name, endpoint_config in self.configuration.items():
             for _ in range(self.iterations):
                 payloadGenerated = self.generatePayload(endpoint_config["payload_configuration"])
@@ -63,10 +61,7 @@ class MutationFuzzer(BaseFuzzer):
         """
         Utility function to run DFS on the API configuration graph and return required configuration
         """
-        config = {
-            "data_type": payload["data_type"], 
-            "generator": self.__createGeneratorInstance(payload)
-        }
+        config = {"data_type": payload["data_type"], "generator": self.__createGeneratorInstance(payload)}
         if payload["data_type"] == dict:
             # Call function recursively for all children and create Generator Instances for them
             children = {}

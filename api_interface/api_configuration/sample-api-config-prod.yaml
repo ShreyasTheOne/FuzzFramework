@@ -1,6 +1,6 @@
 title: Floo # Name of API
 description: Meeting Web Application # Brief description about the API
-base_url: http://localhost:54321/api/ # Base of all enpoint URls.
+base_url: http://localhost/api/ # Base of all enpoint URls.
 csrftokenname: floo_csrftoken
 
 endpoints:
