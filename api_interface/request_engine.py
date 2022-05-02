@@ -30,6 +30,7 @@ class RequestEngine:
 
         # Extract configuration for endpoint to store in class variables
         api_structure = api_configuration.API_CONFIGURATION.structure
+        self.api_structure = api_structure
         self.endpoint_configuration = api_structure["endpoints"][endpoint_name]
 
         # Where to send request?
@@ -42,15 +43,24 @@ class RequestEngine:
         self.response_status_counts = {}
         self.response_messages = {}
 
-    def send_request(
-        self,
-        headers=None,
-        params={},
-        data={},
-        json={},
-        log_details=True
-        # cookies=None
-    ):
+    def send_authenticated_request(
+        self, user_idx, headers={}, params={}, data={}, json={}, cookies={}, log_details=True
+    ) -> None:
+        """Send an authenticated request using the credentials of user with index user_idx"""
+        user = self.api_structure["users"][user_idx]
+        headers = {
+            **headers,
+            "accept": "application/json, text/plain, */*",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36",
+            "X-CSRFToken": user["csrftoken"],
+        }
+        cookies[self.api_structure["sessionidname"]] = user["sessionid"]
+        cookies[self.api_structure["csrftokenname"]] = user["csrftoken"]
+        return self.send_request(
+            headers=headers, params=params, data=data, json=json, log_details=log_details, cookies=cookies
+        )
+
+    def send_request(self, headers=None, params={}, data={}, json={}, log_details=True, cookies={}):
         """
         Send request with values from parameters,
         else take default values from configuration
@@ -62,13 +72,7 @@ class RequestEngine:
         method = self.endpoint_configuration["method"]
 
         response = request(
-            method=method,
-            url=self.request_URL,
-            headers=headers,
-            params=params,
-            data=data,
-            json=json,
-            # cookies=None
+            method=method, url=self.request_URL, headers=headers, params=params, data=data, json=json, cookies=cookies
         )
 
         response_status = response.status_code
