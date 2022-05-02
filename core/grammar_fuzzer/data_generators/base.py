@@ -55,7 +55,7 @@ class BaseGrammarGenerator:
         Calculates symbol and expansion costs
         to be used in different phases
         """
-        
+
         self.symbol_costs = dict()
         self.expansion_costs = dict()
         self.__expanded_children = dict()
@@ -66,7 +66,7 @@ class BaseGrammarGenerator:
 
     def get_symbol_cost(self, symbol, seen = set()):
         """
-        Returns the minimum number of steps 
+        Returns the minimum number of steps
         required to reach a sentence starting from
         the given symbol
         """
@@ -76,7 +76,7 @@ class BaseGrammarGenerator:
                 self.get_expansion_cost(p, seen | {symbol})
                 for p in self.expansions[symbol]
             )
-        
+
         return self.symbol_costs[symbol]
 
     def get_expansion_cost(self, expansion, seen = set()):
@@ -90,10 +90,10 @@ class BaseGrammarGenerator:
             
             if len(symbols) == 0:
                 return 1
-            
+
             elif any(symbol in seen for symbol in symbols):
-                self.expansion_costs[expansion] = float('inf')
-            
+                self.expansion_costs[expansion] = float("inf")
+
             else:
                 self.expansion_costs[expansion] = sum(
                     self.get_symbol_cost(symbol, seen) 
@@ -111,7 +111,7 @@ class BaseGrammarGenerator:
         if isinstance(expansion, list):
             expansion = expansion[0]
         expansion = str(expansion)
-        
+
         return RE_NONTERMINAL.findall(expansion)
     
     def is_non_terminal(self, string):
@@ -120,7 +120,7 @@ class BaseGrammarGenerator:
     def init_tree(self):
         """
         Returns an empty root node to
-        be expanded at the beginning of 
+        be expanded at the beginning of
         data generation
         """
 
@@ -130,7 +130,7 @@ class BaseGrammarGenerator:
         """
         Expand tree in three phases
         """
-        
+
         phases = [
             (self.expand_node_max_cost, self.min_nonterminals),
             (self.expand_node_randomly, self.max_nonterminals),
@@ -189,10 +189,7 @@ class BaseGrammarGenerator:
         costs = [cost for (c, cost, e) in possible_children_with_costs]
         chosen_cost = choose(costs)
 
-        children_with_chosen_cost = [
-            c for (c, cost, _) in possible_children_with_costs
-            if cost == chosen_cost
-        ]
+        children_with_chosen_cost = [c for (c, cost, _) in possible_children_with_costs if cost == chosen_cost]
         chosen_children = choice(children_with_chosen_cost)
         return [symbol, chosen_children]
 
@@ -268,18 +265,18 @@ class BaseGrammarGenerator:
 
     def tree_to_string(self, root):
         """
-        Return a string of all terminals in the tree 
+        Return a string of all terminals in the tree
         (which is the result of the derivation tree with the given root)
         """
-        
+
         symbol, children = root
 
         if children is None:
             # Non terminal which hasn't been expanded yet
-            return ''
+            return ""
         if not children:
             # Terminal reached
             return symbol
-        
+
         # Non terminal which has been expanded
         return ''.join([self.tree_to_string(s) for s in children])

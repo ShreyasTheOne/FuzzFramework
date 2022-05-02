@@ -24,6 +24,9 @@ class GrammarFuzzer(BaseFuzzer):
                 iterations=iterations,
                 fuzzer_type=self.fuzzer_type
             )
+
+    def fuzz_all(self):
+        for endpointName, endpointDetails in self._endpoints.items():
             self.fuzz(self._requestEngines[endpointName], endpointName)
 
     def fuzz(self, requestEngine, endpointName) -> None:
@@ -36,16 +39,14 @@ class GrammarFuzzer(BaseFuzzer):
 
         for _ in range(self.iterations):
 
-            payloadGenerated = self.generatePayload(payloadStructure)      
-            # print(payloadGenerated)
+            payloadGenerated = self.generatePayload(payloadStructure)
 
             if requestMethod == "GET":
                 requestEngine.send_request(params=payloadGenerated)
             elif requestMethod in ["PUT", "POST", "UPDATE"]:
                 requestEngine.send_request(json=payloadGenerated)
             elif requestMethod in ["DELETE", "OPTIONS"]:
-                requestEngine.send_request()        
-
+                requestEngine.send_request()
 
     def generatePayload(self, payloadStructure):
 
@@ -67,5 +68,5 @@ class GrammarFuzzer(BaseFuzzer):
                     )
 
             payload[key] = self.dataGenerators[key].generate()
-        
+
         return payload

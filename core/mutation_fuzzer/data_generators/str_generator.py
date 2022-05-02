@@ -66,7 +66,7 @@ class StrGenerator(BaseGenerator):
             return value
 
         random_index = randint(0, len(value) - 1)
-        return value[0:random_index] + value[random_index + 1:]
+        return value[0:random_index] + value[random_index + 1 :]
 
     def __insert_random_character(self, value):
         """
@@ -93,7 +93,7 @@ class StrGenerator(BaseGenerator):
         random_index = randint(0, len(value) - 1)
         char_at_index = value[random_index]
         flipped_char = chr(ord(char_at_index) ^ (1 << randint(0, 6)))
-        return value[:random_index] + flipped_char + value[random_index + 1:]
+        return value[:random_index] + flipped_char + value[random_index + 1 :]
 
     def __modify_random_character(self, value):
         """
@@ -106,4 +106,4 @@ class StrGenerator(BaseGenerator):
 
         random_index = randint(0, len(value) - 1)
         random_character = chr(randint(32, 126))
-        return value[:random_index] + random_character + value[random_index + 1:]
+        return value[:random_index] + random_character + value[random_index + 1 :]
