@@ -8,3 +8,4 @@ class GrammarMutationFuzzer(GrammarFuzzer):
     """
 
     generator_class = BaseGrammarMutationGenerator
+    fuzzer_type = "grammar_mutation"

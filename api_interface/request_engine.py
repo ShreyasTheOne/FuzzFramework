@@ -1,6 +1,6 @@
+import re
 import sys
 import textwrap
-from datetime import datetime
 from os import path, mkdir
 from requests import request
 from requests.exceptions import JSONDecodeError
@@ -14,7 +14,7 @@ class RequestEngine:
     send requests the API using the given
     """
 
-    def __init__(self, endpoint_name, fuzzer_type=""):
+    def __init__(self, endpoint_name, iterations, fuzzer_type=""):
         """
         Initialise request
         """
@@ -24,6 +24,9 @@ class RequestEngine:
 
         # Fuzzer type for log file name
         self.fuzzer_type = fuzzer_type
+
+        self.total_iterations = iterations
+        self.run_iterations = 0
 
         # Extract configuration for endpoint to store in class variables
         api_structure = api_configuration.API_CONFIGURATION.structure
@@ -36,6 +39,8 @@ class RequestEngine:
 
         # To name the 500 error log files
         self._500_count = 0
+        self.response_status_counts = {}
+        self.response_messages = {}
 
     def send_request(
         self,
@@ -66,14 +71,27 @@ class RequestEngine:
         )
 
         response_status = response.status_code
+        if response_status in self.response_status_counts:
+            self.response_status_counts[response_status] += 1
+        else:
+            self.response_status_counts[response_status] = 1
+        
         _500 = False
         try:
             response_json = response.json()
+            response_message = str(response_json)
         except JSONDecodeError:
             response_html = response.text
             response_json = f"playground/logs/{str(self.fuzzer_type)}_{str(self.endpoint_name)}_500/{self._500_count}.html"
+            response_message = self.extract_message_from_json(response_html)
             _500 = True
         response_headers = response.headers
+
+        if (response_status / 100) in [4, 5]:
+            if response_message in self.response_messages:
+                self.response_messages[response_message] += 1
+            else:
+                self.response_messages[response_message] = 1
 
         self.__log_details(
             request={
@@ -91,6 +109,16 @@ class RequestEngine:
 
         if _500:
             self.__log_500(response_html=response_html)
+
+    def extract_message_from_json(self, response_html):
+
+        pre, post = response_html.split('<pre class="exception_value">')
+        message = post.split("</pre>")[0]
+        heading = pre.split("<title>")[1].split("</title>")[0]
+        heading = re.sub("\s+", " ", heading.replace("\n", ""))
+
+        return f"{heading}: {message}"
+
 
     def __log_details(self, request, response):
         """
@@ -140,6 +168,38 @@ class RequestEngine:
         """
 
         log_file.write(textwrap.dedent(log_string))
+
+        self.run_iterations += 1
+
+        if self.run_iterations == self.total_iterations:
+            newline = "\n"
+            status_count_heading = f"""
+            ---------------------------
+            Response Status Code Counts
+            ---------------------------
+            """
+            log_file.write(textwrap.dedent(status_count_heading))
+
+            for code, count in self.response_status_counts.items():
+                status_count_string = f"""
+                {code}: {count}"""
+                log_file.write(textwrap.dedent(status_count_string))
+            
+            response_message_heading = f"""
+            
+
+            -----------------------
+            Error Message Counts
+            -----------------------            
+            """
+            log_file.write(textwrap.dedent(response_message_heading))
+
+            for message, count in self.response_messages.items():
+                response_message_string = f"""
+                {message}: {count}"""
+                log_file.write(textwrap.dedent(response_message_string))
+
+
         log_file.close()
 
     def __log_500(self, response_html):

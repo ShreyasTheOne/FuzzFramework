@@ -33,6 +33,8 @@ class BaseGrammarGenerator:
         and returns it as a string of terminals.
         """
 
+        # return ""
+
         root = self.generate_tree()
         value = self.tree_to_string(root)
         return self.data_type(value)
@@ -148,13 +150,12 @@ class BaseGrammarGenerator:
         """
 
         self.expand_node = expand_node_method
+        i = 1
         while (
             ((limit is None) or (self.possible_expansions(root) < limit))
-            and
-            self.able_to_expand(root)            
+            and self.able_to_expand(root)
         ):
             root = self.expand_tree_once(root)
-        
         return root
     
     def expand_node_max_cost(self, node):
@@ -230,13 +231,13 @@ class BaseGrammarGenerator:
 
     def able_to_expand(self, root):
         """
-        Check if any non terminal exists in t==
+        Check if any non terminal exists in
         the tree with the given root
         """
         symbol, children = root
         if children is None:
             return True
-        
+
         return any(self.able_to_expand(c) for c in children)
 
     def expansion_to_children(self, expansion):

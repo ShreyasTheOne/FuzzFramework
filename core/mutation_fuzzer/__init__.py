@@ -54,7 +54,7 @@ class MutationFuzzer(BaseFuzzer):
 
         for endpointName, endpointDetails in self._endpoints.items():
             self.configuration[endpointName] = {
-                "request_engine": RequestEngine(endpoint_name=endpointName, fuzzer_type="mutation"),
+                "request_engine": RequestEngine(endpoint_name=endpointName, iterations=self.iterations, fuzzer_type="mutation"),
                 "request_method": endpointDetails["method"],
                 "payload_configuration": self.__initalizeConfiguration(endpointDetails["payload"]),
             }
